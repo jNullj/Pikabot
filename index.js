@@ -7,3 +7,7 @@ client.login(TOKEN);
 bot.on('ready', () => {
   console.log('I am ready!');
 });
+// Filesystem module for database
+const fs = require('fs');
+// 
+var User = require("./User.js");

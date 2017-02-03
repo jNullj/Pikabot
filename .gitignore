@@ -2,3 +2,5 @@
 node_modules/
 # Database
 db/
+# Ignore file with passwords
+botinfo.js

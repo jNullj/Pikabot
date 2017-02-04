@@ -11,4 +11,18 @@ bot.on('ready', () => {
   console.log('I am ready!');
 });
 // Load the user class
-var User = require("./User.js");
+const User = require('./User.js');
+// Load commands class
+const Command = require('./Command.js');
+
+//for testing
+// create an event listener for messages
+bot.on('message', message => {
+  // if the message is "ping",
+  if (message.content === '!points') {
+    // send "pong" to the same channel.
+    myuser = new User(message.author.id);
+    myuser.load();
+    message.channel.sendMessage(message.author.username + ' has ' + myuser.getPoints() + ' points.');
+  }
+});

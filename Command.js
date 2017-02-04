@@ -1,12 +1,16 @@
-function Command(input){
-    this.command = input;
+class Command {
+    constructor(input){
+        this.command = input;
+    }
+
+    // GET
+    getCommand(){
+        return this.command;
+    }
+
+    getPoints(){
+        // TODO
+    }
 }
 
-// GET
-Command.prototype.getCommand = function(){
-    return this.command;
-}
-
-Command.prototype.getPoints(){
-    // TODO
-}
+module.exports = Command;

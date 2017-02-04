@@ -1,15 +1,10 @@
+const User = require('./User.js');
+
 class Command {
-    constructor(input){
-        this.command = input;
-    }
-
-    // GET
-    getCommand(){
-        return this.command;
-    }
-
-    getPoints(){
-        // TODO
+    static getPoints(id){
+        var user = new User(id);
+        user.load();
+        return user.getPoints();
     }
 }
 

@@ -1,5 +1,5 @@
 // for testing/easy configuration
-var botinfo = require("./botinfo.js");
+const botinfo = require("./botinfo.js");
 
 const TOKEN = botinfo.token;
 const Discord = require('discord.js');

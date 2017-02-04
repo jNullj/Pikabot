@@ -22,6 +22,9 @@ bot.on('message', message => {
       points = Command.getPoints(message.author.id);
       message.reply('You have '+points+' points.');
       break;
+    case '!help':
+      message.channel.sendMessage('Commands: !points');
+      break;
   
     default:
       break;

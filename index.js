@@ -1,4 +1,7 @@
-const TOKEN = 'put bot token here';
+// for testing/easy configuration
+var botinfo = require("./botinfo.js");
+
+const TOKEN = botinfo.token;
 const Discord = require('discord.js');
 const bot = new Discord.Client();
 // login the bot

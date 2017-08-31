@@ -24,8 +24,8 @@ bot.on('message', message => {
       break;
     case (message.content.match(/^!setBDay /) || {}).input: // cheaks if starts with !setBDay
         // isolate the date from the command
-        var regex = /!setBDay (.)/;
-        result = Command.setBDay(message.author.id, message.content.match(regex));
+        var regex = /!setBDay (.*)/;
+        result = Command.setBDay(message.author.id, message.content.match(regex)[1]);
         if (result) {
             // Should it do anything?
         }else{

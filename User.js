@@ -68,7 +68,7 @@ class User {
     //utilitys
     cheakDateFormat(mydate){
         var iso_format = /^(\d{4})-([0-1]\d)-([0-3]\d)$/;
-        var parts = mydate.match(iso_format);
+        var parts = String(mydate).match(iso_format);
         if (parts == null) {
             return false; // not a valid format
         }

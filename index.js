@@ -22,11 +22,20 @@ bot.on('message', message => {
       points = Command.getPoints(message.author.id);
       message.reply('You have '+points+' points.');
       break;
+    case '!setBDay':
+        result = Command.setBDay(message.author.id, message.content);
+        if (result) {
+            // Should it do anything?
+        }else{
+            message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
+        }
+        break;
     case '!help':
-      message.channel.sendMessage('Commands: !points');
+      message.channel.sendMessage('Commands: !points, !setBDay');
       break;
   
     default:
       break;
   }
 });
+

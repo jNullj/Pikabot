@@ -24,7 +24,7 @@ class User {
         this.points = points;
     }
     setBDay(birthday){
-        if (cheakDateFormat(birthday)) {
+        if (this.cheakDateFormat(birthday)) {
             this.birthday = birthday;
             return true;
         }else{

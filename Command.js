@@ -15,6 +15,7 @@ class Command {
     }
     
     static setBDay(id, bdate){
+        var result;
         var user = new User(id);
         if(!user.isExists()){
             if (user.getID() < 0) {

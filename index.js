@@ -22,8 +22,10 @@ bot.on('message', message => {
       points = Command.getPoints(message.author.id);
       message.reply('You have '+points+' points.');
       break;
-    case '!setBDay':
-        result = Command.setBDay(message.author.id, message.content);
+    case (message.content.match(/^!setBDay /) || {}).input: // cheaks if starts with !setBDay
+        // isolate the date from the command
+        var regex = /!setBDay (.)/;
+        result = Command.setBDay(message.author.id, message.content.match(regex));
         if (result) {
             // Should it do anything?
         }else{

@@ -15,6 +15,8 @@ const User = require('./User.js');
 // Load commands class
 const Command = require('./Command.js');
 
+var bday_cheak = 1;    // last date birthday was cheaked
+
 // create an event listener for messages
 bot.on('message', message => {
   switch (message.content) {
@@ -37,7 +39,48 @@ bot.on('message', message => {
       break;
   
     default:
-      break;
+        eventHandler(message);
+        break;
   }
 });
 
+// handles events which are cheaked on each message
+function eventHandler(message){
+    bdayHandler(message);
+}
+
+// cheaks for new/old birthdays and updates server
+function bdayHandler(message){
+    // if birthday was already cheaked today, dont cheak agian
+    var d = new Date();
+    var today = d.toISOString().substring(0,10);
+    if (bday_cheak==today) {
+        return false;
+    }
+    // get the birthday role
+    var myRole = message.guild.roles.find('name', 'BIRTHDAY');
+    // remove old birthday kings 👑 from role
+    myRole.members.reduce(function(hold,user) { user.removeRole(myRole); },0);
+    // read all birthdays
+    const bdFolder = './db/birthday/';
+    const fs = require('fs');
+    
+    fs.readdir(bdFolder, (err, files) => {
+        files.forEach(file => {
+            // if user birthday is today do the thing
+            var userbday = fs.readFileSync(bdFolder + file, 'utf8');
+            if (userbday.substring(6,10) == today.substring(6,10)) {
+                // find the user id
+                var memid = file.substring(0,file.length-4);
+                var bdking = message.guild.member(memid);
+                // add user to BIRTHDAY role
+                bdking.addRole(myRole);
+                // let everyone know the member has a birthday
+                message.guild.channels.first().send('Happy Birthday '+bdking+'!');
+            }
+        });
+    })
+    
+    // update last cheak date to today
+    bday_cheak = today;
+}

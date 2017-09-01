@@ -8,7 +8,10 @@ A simple discord bot.
 discord.js can be installed with `npm install discrod.js --save`
 
 also, you need to add `botinfo.js` on your own with your own bot token as follows:
-exports.token = 'YOUR TOKEN! IF YOU LEAVE THIS TEXT IT WONT WORK';
+
+ ```javascript
+ exports.token = 'YOUR TOKEN! IF YOU LEAVE THIS TEXT IT WONT WORK'; 
+ ```
 
 ### still not working?
 

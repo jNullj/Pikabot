@@ -34,8 +34,12 @@ bot.on('message', message => {
             message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
         }
         break;
+    case '!listchannels':
+        var s_channels = message.guild.channels.reduce(function(str,channel) {  return str+'\n'+channel.name },'');
+        message.channel.send(s_channels);
+        break;
     case '!help':
-      message.channel.sendMessage('Commands: !points, !setBDay');
+      message.channel.sendMessage('Commands: !points, !setBDay, !listchannels');
       break;
   
     default:

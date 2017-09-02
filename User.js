@@ -21,6 +21,10 @@ class User {
         this.id = id;
     }
    setPoints(points){
+        if (points<0) {
+            // cheak if set point is negative, if so dont set it
+            return false;
+        }
         this.points = points;
     }
     setBDay(birthday){

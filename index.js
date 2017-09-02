@@ -39,9 +39,16 @@ bot.on('message', message => {
         message.channel.send(s_channels);
         break;
     case '!help':
-      message.channel.sendMessage('Commands: !points, !setBDay, !listchannels');
+      message.channel.sendMessage('Commands: !points, !setBDay, !praise, !listchannels');
       break;
-  
+	case (message.content.match(/^!praise/) || {}).input:
+		var deity = /!praise (.*)/;
+		if (!message.content.match(deity)){
+			message.reply('!praise usage: !praise <deity>');
+			break;
+		}
+		Command.praise(message,message.author.id, message.content.match(deity)[1]);
+		break;
     default:
         eventHandler(message);
         break;

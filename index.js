@@ -22,8 +22,13 @@ bot.on('message', message => {
   switch (message.content) {
     case '!points':
       points = Command.getPoints(message.author.id);
+	  if (points == 1){
+		  message.reply('You have one point.');
+		  break;
+	  }else{
       message.reply('You have '+points+' points.');
       break;
+	  }
     case (message.content.match(/^!setBDay /) || {}).input: // cheaks if starts with !setBDay
         // isolate the date from the command
         var regex = /!setBDay (.*)/;
@@ -39,7 +44,7 @@ bot.on('message', message => {
       break;
 	case (message.content.match(/^!praise/) || {}).input:
 		var deity = /!praise (.*)/;
-		if (!message.content.match(deity)){
+		if (!message.content.match(deity)){           //Check if no argument was passed
 			message.reply('!praise usage: !praise <deity>');
 			break;
 		}

@@ -43,7 +43,7 @@ class Command {
 			user.load();
 		}
 		points = user.getPoints();
-		var name=deity.toUpperCase();
+		var name=deity.toUpperCase();   //Set to uppercase to ignore case sensitive
 		switch (name) {
 			case 'LORD PIKACHU':
 			case 'LORDPIKA':

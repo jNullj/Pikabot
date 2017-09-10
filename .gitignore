@@ -4,3 +4,5 @@ node_modules/
 db/
 # Ignore file with passwords
 botinfo.js
+# Ignore this file because Johny said so
+package-lock.json

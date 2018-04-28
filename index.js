@@ -14,6 +14,8 @@ bot.on('ready', () => {
 const User = require('./User.js');
 // Load commands class
 const Command = require('./Command.js');
+// Load database
+const DB = require("./DB.js");
 
 var bday_cheak = 1;    // last date birthday was cheaked
 

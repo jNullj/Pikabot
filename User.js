@@ -1,3 +1,6 @@
+// Load database
+const DB = require("./DB.js");
+
 class User {
     constructor(id = -1 ,points = 0){
         this.id = id;
@@ -36,12 +39,16 @@ class User {
 
     // Cheak if the user exists in the db
     isExists(){
+        return DB.isUserExist(this.id);
         const fs = require('fs');
         var path = './db/points/' + this.id + ".txt";
         return fs.existsSync(path);
     }
     // Save user to db
     save(){
+        DB.setPoints(this.id, this.points);
+        DB.setBirthday(this.id, this.birthday);
+        return;
         const fs = require('fs');
         // save points
         var path = './db/points/' + this.id + ".txt";
@@ -54,6 +61,9 @@ class User {
     }
     // Load user from db
     load(){
+        this.points = DB.getPoints(this.id);
+        this.birthday = DB.getBirthday(this.id);
+        return;
         const fs = require('fs');
         // load points
         var path = './db/points/' + this.id + ".txt";

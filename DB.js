@@ -56,10 +56,10 @@ class DB {
         var db = this.connect();
         var row = db.prepare(sql).get(uid);
         this.disconnect(db);
-        if (row.id == uid){
-            return true;
+        if (row === undefined){     // accurding to better-sqlite3 returns undefined if results was empty
+            return false;           // if row is undefined the sucssesful quary is empty, user doesnt exists
         }else{
-            return false;
+            return true;            // else the user was retrieved from the db, user exists in db
         }
     }
     static newUser(uid){

@@ -5,7 +5,6 @@ const DB = require("./DB.js");
 class Command {
     static getPoints(id){
         var user = new User(id);
-        console.log(user.isExists());
         if(!user.isExists()){
             if (user.getID() < 0) {
                 throw 'invalid user id';

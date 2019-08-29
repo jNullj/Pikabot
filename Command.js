@@ -16,6 +16,21 @@ class Command {
         }
         return user.getPoints();
     }
+
+    static addPoints(id, points){
+        var user = new User(id);
+        if(!user.isExists()){
+            if (user.getID() < 0) {
+                throw 'invalid user id';
+            }
+            DB.newUser(id);
+            user.save();
+        }else{
+            user.load();
+            user.setPoints(user.getPoints() + points);
+            user.save();
+        }
+    }
     
     static setBDay(id, bdate){
         var result;

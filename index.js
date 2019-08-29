@@ -21,6 +21,7 @@ var bday_cheak = 1;    // last date birthday was cheaked
 
 // create an event listener for messages
 bot.on('message', message => {
+  Command.addPoints(message.author.id, 1);
   switch (message.content) {
     case '!points':
       points = Command.getPoints(message.author.id);

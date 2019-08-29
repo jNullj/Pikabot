@@ -69,6 +69,19 @@ class DB {
         db.prepare(sql).run(uid);
         this.disconnect(db);
     }
+    static BDayOnDate(date){
+        var result = [];
+        var sql = `SELECT id
+                    FROM users
+                    WHERE birthday LIKE ?`;
+        var db = this.connect();
+        var row = db.prepare(sql).all('%'+date);
+        this.disconnect(db);
+        row.forEach((row) => {
+            result.push(row.id);
+        });
+        return result;
+    }
 }
 
 module.exports = DB;

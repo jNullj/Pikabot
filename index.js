@@ -32,7 +32,7 @@ bot.on('message', message => {
         var regex = /!setBDay (.*)/;
         result = Command.setBDay(message.author.id, message.content.match(regex)[1]);
         if (result) {
-            // Should it do anything?
+            message.reply('Birthday was set for <@' + message.author.id + '>');
         }else{
             message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
         }
@@ -61,28 +61,22 @@ function bdayHandler(message){
         return false;
     }
     // get the birthday role
-    var myRole = message.guild.roles.find('name', 'BIRTHDAY');
+    var myRole = message.guild.roles.find(role => role.name === 'BIRTHDAY');
     // remove old birthday kings 👑 from role
     myRole.members.reduce(function(hold,user) { user.removeRole(myRole); },0);
     // read all birthdays
-    const bdFolder = './db/birthday/';
-    const fs = require('fs');
     
-    fs.readdir(bdFolder, (err, files) => {
-        files.forEach(file => {
-            // if user birthday is today do the thing
-            var userbday = fs.readFileSync(bdFolder + file, 'utf8');
-            if (userbday.substring(6,10) == today.substring(6,10)) {
-                // find the user id
-                var memid = file.substring(0,file.length-4);
-                var bdking = message.guild.member(memid);
-                // add user to BIRTHDAY role
-                bdking.addRole(myRole);
-                // let everyone know the member has a birthday
-                message.guild.channels.first().send('Happy Birthday '+bdking+'!');
-            }
-        });
-    })
+    var kings = Command.findBDayKing();
+    kings.forEach(king_id => {
+        // if user birthday is today do the thing
+        var bdking = message.guild.members.find(GuildMember => GuildMember.id == king_id)
+        var myRole = message.guild.roles.find(role => role.name === 'BIRTHDAY');
+        bdking.addRole(myRole);
+        // add user to BIRTHDAY role
+        // let everyone know the member has a birthday
+        var main_channel = bot.channels.find(channel => channel.name == 'general');
+        main_channel.send('👑Happy Birthday '+bdking+'!👑');
+    });
     
     // update last cheak date to today
     bday_cheak = today;

@@ -61,20 +61,20 @@ function bdayHandler(message){
         return false;
     }
     // get the birthday role
-    var myRole = message.guild.roles.find(role => role.name === 'BIRTHDAY');
+    var myRole = message.guild.roles.cache.find(role => role.name === 'BIRTHDAY');
     // remove old birthday kings 👑 from role
-    myRole.members.reduce(function(hold,user) { user.removeRole(myRole); },0);
+    myRole.members.cache.reduce(function(hold,user) { user.removeRole(myRole); },0);
     // read all birthdays
     
     var kings = Command.findBDayKing();
     kings.forEach(king_id => {
         // if user birthday is today do the thing
-        var bdking = message.guild.members.find(GuildMember => GuildMember.id == king_id)
-        var myRole = message.guild.roles.find(role => role.name === 'BIRTHDAY');
+        var bdking = message.guild.members.cache.find(GuildMember => GuildMember.id == king_id)
+        var myRole = message.guild.roles.cache.find(role => role.name === 'BIRTHDAY');
         bdking.addRole(myRole);
         // add user to BIRTHDAY role
         // let everyone know the member has a birthday
-        var main_channel = bot.channels.find(channel => channel.name == 'general');
+        var main_channel = bot.channels.cache.find(channel => channel.name == 'general');
         main_channel.send('👑Happy Birthday '+bdking+'!👑');
     });
     

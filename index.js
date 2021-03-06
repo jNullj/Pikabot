@@ -63,7 +63,9 @@ function bdayHandler(message){
     // get the birthday role
     var myRole = message.guild.roles.cache.find(role => role.name === 'BIRTHDAY');
     // remove old birthday kings 👑 from role
-    myRole.members.cache.reduce(function(hold,user) { user.removeRole(myRole); },0);
+    if (myRole.members.cache) { // if there are old members, remove them
+      myRole.members.cache.find(user => user.removeRole(myRole));
+    }
     // read all birthdays
     
     var kings = Command.findBDayKing();

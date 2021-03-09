@@ -73,7 +73,7 @@ function bdayHandler(message){
         // if user birthday is today do the thing
         var bdking = message.guild.members.cache.find(GuildMember => GuildMember.id == king_id)
         var myRole = message.guild.roles.cache.find(role => role.name === 'BIRTHDAY');
-        bdking.addRole(myRole);
+        bdking.roles.add(myRole);
         // add user to BIRTHDAY role
         // let everyone know the member has a birthday
         var main_channel = bot.channels.cache.find(channel => channel.name == 'general');

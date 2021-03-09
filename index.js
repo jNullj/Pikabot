@@ -77,7 +77,7 @@ function bdayHandler(message){
         // add user to BIRTHDAY role
         // let everyone know the member has a birthday
         var main_channel = bot.channels.cache.find(channel => channel.name == 'general');
-        main_channel.send('👑Happy Birthday '+bdking.tag+'!👑');
+        main_channel.send('👑Happy Birthday ${bdking}!👑');
     });
     
     // update last cheak date to today

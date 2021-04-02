@@ -40,39 +40,18 @@ class User {
     // Cheak if the user exists in the db
     isExists(){
         return DB.isUserExist(this.id);
-        const fs = require('fs');
-        var path = './db/points/' + this.id + ".txt";
-        return fs.existsSync(path);
     }
     // Save user to db
     save(){
         DB.setPoints(this.id, this.points);
         DB.setBirthday(this.id, this.birthday);
         return;
-        const fs = require('fs');
-        // save points
-        var path = './db/points/' + this.id + ".txt";
-        var data = this.points;
-        fs.writeFile(path, data, (err) => {if(err){return err;}});
-        // save birthday
-        var path = './db/birthday/' + this.id + ".txt";
-        var data = this.birthday;
-        fs.writeFile(path, data, (err) => {if(err){return err;}});
     }
     // Load user from db
     load(){
         this.points = DB.getPoints(this.id);
         this.birthday = DB.getBirthday(this.id);
         return;
-        const fs = require('fs');
-        // load points
-        var path = './db/points/' + this.id + ".txt";
-        this.points = fs.readFileSync(path);
-        // load birthday if exists
-        var path = './db/birthday/' + this.id + ".txt";
-        if (fs.existsSync(path)) {    //cheak if birthday exists for user
-            this.birthday = fs.readFileSync(path);
-        }
     }
 
     //utilitys
@@ -87,4 +66,3 @@ class User {
 }
 
 module.exports = User;
-

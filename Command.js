@@ -31,7 +31,7 @@ class Command {
             user.save();
         }
     }
-    
+
     static setBDay(id, bdate){
         var result;
         var user = new User(id);
@@ -58,7 +58,54 @@ class Command {
         result = DB.BDayOnDate(today_date);
         return result;
     }
+
+    static addMemberToPrivateChannel(member, channel){
+        const newPermision = { VIEW_CHANNEL: true };
+        channel.updateOverwrite(member, newPermision);
+    }
+
+    static removeMemberFromPrivateChannel(member, channel){
+        const newPermision = { VIEW_CHANNEL: false };
+        channel.updateOverwrite(member, newPermision);
+    }
+
+    static addToPrivateChannel(msg){
+      // isolate the date from the command
+        var regex = /!joinChannel (.*)/;
+        var channel_name = msg.content.match(regex)[1];
+        var channel = msg.guild.channels.cache.find(
+          channel => channel.name === channel_name);
+        if(channel != undefined && DB.isSelfAddChannel(channel.id)){
+          this.addMemberToPrivateChannel(msg.author, channel);
+          msg.reply("I added you to " + channel.toString());
+        }else{
+          msg.reply("Wrong channel was requested");
+        }
+    }
+
+    static removeFromPrivateChannel(msg){
+      // isolate the date from the command
+        var regex = /!leaveChannel (.*)/;
+        var channel_name = msg.content.match(regex)[1];
+        var channel = msg.guild.channels.cache.find(
+          channel => channel.name === channel_name);
+        if(channel != undefined && DB.isSelfAddChannel(channel.id)){
+          this.removeMemberFromPrivateChannel(msg.author, channel);
+          msg.reply("I removed you from " + channel.toString());
+        }else{
+          msg.reply("Wrong channel!");
+        }
+    }
+
+    static privateChannelsString(client){
+        let channel_list = DB.getSelfAddChannels();
+        let result = "";
+        channel_list.forEach(channel => {
+          result += client.channels.cache.get(channel).toString();
+          result += " ";
+        });
+        return result;
+    }
 }
 
 module.exports = Command;
-

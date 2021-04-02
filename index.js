@@ -37,10 +37,27 @@ bot.on('message', message => {
             message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
         }
         break;
+    case '!channels':
+        message.reply('Here is a list of private channels:\n' +
+          Command.privateChannelsString(message.client) +
+          '\nTo join them use the !joinChannel command');
+        break;
+    case (message.content.match(/^!joinChannel /) || {}).input:
+        Command.addToPrivateChannel(message);
+        break;
+    case (message.content.match(/^!leaveChannel /) || {}).input:
+        Command.removeFromPrivateChannel(message);
+        break;
     case '!help':
-      message.channel.sendMessage('Commands: !points, !setBDay');
+      message.reply(
+`Commands:
+!points         - how many points you got?
+!setBDay        - sets your birthday
+!channels       - see all joinable channels
+!joinChannel    - join a hidden channel
+!leaveChannel   - leave a hidden channel`
+        );
       break;
-  
     default:
         eventHandler(message);
         break;
@@ -67,7 +84,7 @@ function bdayHandler(message){
       myRole.members.cache.find(user => user.removeRole(myRole));
     }
     // read all birthdays
-    
+
     var kings = Command.findBDayKing();
     kings.forEach(king_id => {
         // if user birthday is today do the thing
@@ -79,7 +96,7 @@ function bdayHandler(message){
         var main_channel = bot.channels.cache.find(channel => channel.name == 'general');
         main_channel.send(`👑Happy Birthday ${bdking}!👑`);
     });
-    
+
     // update last cheak date to today
     bday_cheak = today;
 }

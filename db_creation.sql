@@ -14,3 +14,8 @@ CREATE TABLE gods (
 
 CREATE UNIQUE INDEX gods_id_IDX ON gods (id);
 
+CREATE TABLE selfAddChannels (
+	id INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX selfAddChannels_id_IDX ON selfAddChannels (id);

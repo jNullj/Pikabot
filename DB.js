@@ -82,6 +82,33 @@ class DB {
         });
         return result;
     }
+
+    static isSelfAddChannel(channel_id){
+        var sql = `SELECT id
+                    FROM selfAddChannels
+                    WHERE id = ?`;
+        var db = this.connect();
+        var row = db.prepare(sql).get(channel_id);
+        this.disconnect(db);
+        if (row === undefined){     // accurding to better-sqlite3 returns undefined if results was empty
+            return false;           // if row is undefined the sucssesful quary is empty, user doesnt exists
+        }else{
+            return true;            // else the user was retrieved from the db, user exists in db
+        }
+    }
+
+    static getSelfAddChannels(){
+        var result = [];
+        var sql = `SELECT CAST(id AS TEXT) id
+                    FROM selfAddChannels`;
+        var db = this.connect();
+        var row = db.prepare(sql).all();
+        this.disconnect(db);
+        row.forEach((row) => {
+            result.push(row.id);
+        });
+        return result;
+    }
 }
 
 module.exports = DB;

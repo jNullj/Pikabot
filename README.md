@@ -1,5 +1,8 @@
 # Pikabot
-A simple discord bot.
+A simple discord bot for the followers of lord pika.
 
-one dependency is better-sqlite3, to install it run the command `npm install better-sqlite3`
-another one is discord.js version 12+ `npm install discord.js`
+dependencies:
+ - better-sqlite3
+ - discord.js
+
+to install all dependencies use `npm install`

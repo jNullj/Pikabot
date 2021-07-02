@@ -110,3 +110,14 @@ bot.on('guildMemberAdd', member => {
   // Send the message, mentioning the member
   channel.send(`Welcome to the server, ${member}`);
 });
+
+bot.on('voiceStateUpdate', (oldState, newState) => {
+  if(oldState === undefined && newState != undefined){
+    // user joined voice chat, wellcome them
+    Command.doPikaNoise(newState.channel);
+  } else if (newState === undefined) {
+    // user left voice chat :< goodbye
+  } else {
+    // user muted/unmuted or changed something else
+  }
+})

@@ -113,7 +113,7 @@ class Command {
         return result;
     }
 
-    static doPikaNoise(vchannel){
+    static async doPikaNoise(vchannel){
         if(vchannel==undefined){ console.log("pikanoise missing channel"); return; } //avoid crushing when vc is missing
 
         // find all sound files

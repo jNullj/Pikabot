@@ -120,7 +120,7 @@ class Command {
         var sound_files = [];
         fs.readdirSync(SOUND_FOLDER).forEach(file => {
           const relativeFilePath = SOUND_FOLDER + file;
-          if(path.extname(relativeFilePath)=='.wav'){
+          if(path.extname(relativeFilePath).toLowerCase()=='.wav'){
             sound_files.push(relativeFilePath);
           }
         });

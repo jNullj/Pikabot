@@ -129,7 +129,7 @@ class Command {
           return;
         }
         // pick one random file to play
-        let rand = Math.random();
+        let rand = Math.random() * sound_files.length;
         var i = Math.floor(rand % sound_files.length); //get random index from array
         const connection = await vchannel.join();
         const dispatcher = connection.play(sound_files[i]);

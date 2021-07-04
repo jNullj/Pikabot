@@ -1,6 +1,12 @@
+// load required classes
 const User = require('./User.js');
 // Load database
 const DB = require("./DB.js");
+// file locations
+const SOUND_FOLDER = './sounds/';
+// load packages
+const fs = require('fs');
+const path = require('path');
 
 class Command {
     static getPoints(id){
@@ -105,6 +111,38 @@ class Command {
           result += " ";
         });
         return result;
+    }
+
+    static async doPikaNoise(vchannel){
+        if(vchannel==undefined){ console.log("pikanoise missing channel"); return; } //avoid crushing when vc is missing
+
+        // find all sound files
+        var sound_files = [];
+        fs.readdirSync(SOUND_FOLDER).forEach(file => {
+          const relativeFilePath = SOUND_FOLDER + file;
+          if(path.extname(relativeFilePath).toLowerCase()=='.wav'){
+            sound_files.push(relativeFilePath);
+          }
+        });
+        if(sound_files.length===0){
+          // no sound files found, nothing to do
+          return;
+        }
+        // pick one random file to play
+        let rand = Math.random() * sound_files.length;
+        var i = Math.floor(rand % sound_files.length); //get random index from array
+        const connection = await vchannel.join();
+        const dispatcher = connection.play(sound_files[i]);
+
+        dispatcher.on('start', () => {
+          // placeholder
+        });
+
+        dispatcher.on('finish', () => {
+	        connection.disconnect();
+        });
+
+        dispatcher.on('error', console.error);
     }
 }
 

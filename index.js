@@ -109,3 +109,20 @@ bot.on('guildMemberAdd', member => {
   // Send the message, mentioning the member
   channel.send(`Welcome to the server, ${member}`);
 });
+
+bot.on('voiceStateUpdate', (oldState, newState) => {
+
+  let oldChannel = oldState.channelID;
+  let newChannel = newState.channelID;
+
+  if(oldChannel === null && newChannel != null){
+    // user joined voice chat, wellcome them
+    Command.doPikaNoise(newState.channel);
+  } else if (oldChannel != null && newState === null) {
+    // user left voice chat :< goodbye
+  } else if (oldChannel != null && newChannel != null){
+    // user moved to a new voice channel or changed state
+  } else {
+    // user is a hacker
+  }
+})

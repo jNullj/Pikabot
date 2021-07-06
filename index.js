@@ -118,7 +118,7 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
   if(oldChannel === null && newChannel != null){
     // user joined voice chat, wellcome them
     let user = newState.member.user;  // find user who joined
-    if (user.bot is false) {  // dont triger from bots
+    if (user.bot === false) {  // dont triger from bots
         Command.doPikaNoise(newState.channel);
     }
   } else if (oldChannel != null && newState === null) {

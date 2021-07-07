@@ -117,10 +117,15 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
 
   if(oldChannel === null && newChannel != null){
     // user joined voice chat, wellcome them
-    Command.doPikaNoise(newState.channel);
+    let user = newState.member.user;  // find user who joined
+    if (user.bot === false) {  // dont triger from bots
+        Command.doPikaNoise(newState.channel);
+    }
   } else if (oldChannel != null && newState === null) {
+    let user = oldState.member.user;  // find user who left
     // user left voice chat :< goodbye
   } else if (oldChannel != null && newChannel != null){
+    let user = newState.member.user;  // find user who moved
     // user moved to a new voice channel or changed state
   } else {
     // user is a hacker

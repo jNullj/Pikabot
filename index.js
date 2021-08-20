@@ -3,7 +3,12 @@ const botinfo = require("./botinfo.js");
 
 const TOKEN = botinfo.token;
 const Discord = require('discord.js');
-const bot = new Discord.Client();
+const myIntents = new Discord.Intents();
+myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
+myIntents.add(Discord.Intents.FLAGS.GUILD_VOICE_STATES);
+myIntents.add(Discord.Intents.FLAGS.GUILD_MEMBERS);
+myIntents.add(Discord.Intents.FLAGS.GUILDS);
+const bot = new Discord.Client({ intents: myIntents });
 // login the bot
 bot.login(TOKEN);
 // critical, makes sure the bot will only start after discord gives it the green flag
@@ -20,7 +25,7 @@ const DB = require("./DB.js");
 var bday_cheak = 1;    // last date birthday was cheaked
 
 // create an event listener for messages
-bot.on('message', message => {
+bot.on('messageCreate', message => {
   Command.addPoints(message.author.id, 1);
   switch (message.content) {
     case '!points':
@@ -112,8 +117,8 @@ bot.on('guildMemberAdd', member => {
 
 bot.on('voiceStateUpdate', (oldState, newState) => {
 
-  let oldChannel = oldState.channelID;
-  let newChannel = newState.channelID;
+  let oldChannel = oldState.channelId;
+  let newChannel = newState.channelId;
 
   if(oldChannel === null && newChannel != null){
     // user joined voice chat, wellcome them

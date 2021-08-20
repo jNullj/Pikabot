@@ -112,8 +112,8 @@ bot.on('guildMemberAdd', member => {
 
 bot.on('voiceStateUpdate', (oldState, newState) => {
 
-  let oldChannel = oldState.channelID;
-  let newChannel = newState.channelID;
+  let oldChannel = oldState.channelId;
+  let newChannel = newState.channelId;
 
   if(oldChannel === null && newChannel != null){
     // user joined voice chat, wellcome them

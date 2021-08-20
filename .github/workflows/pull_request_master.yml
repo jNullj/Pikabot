@@ -35,7 +35,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install ffmpeg
           
       - name: Install node dependencies
-        run: npm ci
+        run: npm install
       
       - name: Node code check
         run: find -maxdepth 1 -name "*.js" -exec node -c {} \;

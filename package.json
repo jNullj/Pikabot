@@ -12,7 +12,10 @@
   "homepage": "https://github.com/jNullj/Pikabot",
   "dependencies": {
     "better-sqlite3": "^7.1.4",
-    "discord.js": "^12.5.3",
-    "@discordjs/opus": "^0.3.2"
+    "discord.js": "^13.1.0",
+    "@discordjs/voice": "^0.6.0"
+  },
+  "engines": {
+    "node": ">=16.6.0"
   }
 }

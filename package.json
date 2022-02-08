@@ -11,11 +11,11 @@
   },
   "homepage": "https://github.com/jNullj/Pikabot",
   "dependencies": {
-    "better-sqlite3": "^7.1.4",
-    "discord.js": "^13.1.0",
-    "@discordjs/voice": "^0.6.0"
+    "better-sqlite3": "^7.5.0",
+    "discord.js": "^13.6.0",
+    "@discordjs/voice": "^0.8.0"
   },
   "engines": {
-    "node": ">=16.6.0"
+    "node": ">=17.3.0"
   }
 }

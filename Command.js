@@ -7,6 +7,8 @@ const SOUND_FOLDER = './sounds/';
 // load packages
 const fs = require('fs');
 const path = require('path');
+// load voice
+const { createAudioResource, createAudioPlayer, joinVoiceChannel, VoiceConnectionStatus, AudioPlayerStatus, getVoiceConnection, entersState } = require('@discordjs/voice');
 
 class Command {
     static getPoints(id){
@@ -131,18 +133,25 @@ class Command {
         // pick one random file to play
         let rand = Math.random() * sound_files.length;
         var i = Math.floor(rand % sound_files.length); //get random index from array
-        const connection = await vchannel.join();
-        const dispatcher = connection.play(sound_files[i]);
-
-        dispatcher.on('start', () => {
-          // placeholder
+        const player = createAudioPlayer()
+        const connection = joinVoiceChannel({
+            channelId: vchannel.id,
+            guildId: vchannel.guild.id,
+            adapterCreator: vchannel.guild.voiceAdapterCreator
         });
-
-        dispatcher.on('finish', () => {
-	        connection.disconnect();
+        connection.subscribe(player);
+        let resource = createAudioResource(sound_files[i]);
+        try {
+            await entersState(connection, VoiceConnectionStatus.Ready, 300e3);
+            player.play(resource)
+            await entersState(player, AudioPlayerStatus.Playing, 200e3)
+        } catch (error) {
+            connection.destroy();
+            console.log(error);
+        }
+        player.on(AudioPlayerStatus.Idle, () => {
+            connection.destroy()
         });
-
-        dispatcher.on('error', console.error);
     }
 }
 

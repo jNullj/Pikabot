@@ -90,6 +90,11 @@ function bdayHandler(message){
     // read all birthdays
 
     var kings = Command.findBDayKing();
+
+    // not all members are fetched to cache by default
+    // birthday kings might not be cached if they did not interact since last startup
+    // as a fix fetch all current guild members prior to finding the members in cache
+    message.guild.members.fetch().then(() => {
     kings.forEach(king_id => {
         // if user birthday is today do the thing
         var bdking = message.guild.members.cache.find(GuildMember => GuildMember.id == king_id)
@@ -99,7 +104,8 @@ function bdayHandler(message){
         // let everyone know the member has a birthday
         var main_channel = bot.channels.cache.find(channel => channel.name == 'general');
         main_channel.send(`👑Happy Birthday ${bdking}!👑`);
-    });
+    })
+    })
 
     // update last cheak date to today
     bday_cheak = today;

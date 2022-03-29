@@ -6,3 +6,7 @@ db/
 *.db
 # Ignore file with passwords
 botinfo.js
+# Ignore media files which are bot deployment specific
+sounds/*.wav
+sounds/*.mp3
+sounds/*.ogg

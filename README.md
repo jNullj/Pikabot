@@ -8,6 +8,18 @@ dependencies:
 To install Node please consult your os/distro docs.
 To install all node package dependencies use `npm install`
 
+# Docker installation
+
+For the docker installation you must have both docker and docker-compose.
+To config first rename `.env-dst` to `.env` and insert your api key into the file.
+To build and start the container use `docker-compose up -d`.
+To upgrade existing install simply pull the latest git commit then rebuild the image.
+```
+docker-compose down
+git pull
+docker-compose --build -d
+```
+
 ## Database creation
 The database should be created automaticly when the database file is missing.
 

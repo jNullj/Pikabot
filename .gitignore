@@ -10,3 +10,5 @@ botinfo.js
 sounds/*.wav
 sounds/*.mp3
 sounds/*.ogg
+# Docker params (including api key)
+.env

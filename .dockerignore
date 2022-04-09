@@ -1,0 +1,10 @@
+node_modules/
+package-lock.json
+.git/
+.gitignore
+*.mp3
+*.wav
+.env
+.env-dst
+docker-compose.yml
+*.db

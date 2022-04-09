@@ -21,6 +21,7 @@ const User = require('./User.js');
 const Command = require('./Command.js');
 // Load database
 const DB = require("./DB.js");
+DB.init_db(); // generate new db if non exists
 
 var bday_cheak = 1;    // last date birthday was cheaked
 

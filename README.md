@@ -9,6 +9,8 @@ To install Node please consult your os/distro docs.
 To install all node package dependencies use `npm install`
 
 ## Database creation
-Before running the bot you must create a database using the provided `db_creation.sql` file.
-SQLite3 db file must be named database.db in the root folder of the project.
-This can be done using `sqlite3 database.db < db_creation.sql`.
+The database should be created automaticly when the database file is missing.
+
+In case you need to generate the file menually you can use `db_creation.sql` to generate the database structure.
+SQLite3 db file must be named `database.db` and located in `/database/`.
+This can be done using `sqlite3 database/database.db < db_creation.sql`.

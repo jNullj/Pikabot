@@ -1,7 +1,25 @@
 var SQL = require('better-sqlite3'); // Load sqlite module
-const DB_FILE = 'database.db'; // DB File name
+const DB_FILE = 'database/database.db'; // DB File name
+const DB_INIT_FILE = 'db_creation.sql'; // DB creation instructions
 
 class DB {
+    static init_db() {
+        // check if db exists, if not create it
+        const fs = require('fs') // import fs to check if db exists and read db init file
+        try {
+            if (!fs.existsSync(DB_FILE)) {
+                console.log('DB file does not exist, creating new DB.')
+                // db does not exist, create it
+                const sql = fs.readFileSync(DB_INIT_FILE, 'utf8')
+                let db = this.connect()
+                db.exec(sql)
+                this.disconnect(db)
+                console.log('new DB created at ' + DB_FILE)
+            }
+        } catch(v) {
+            console.error(v)
+        }
+    }
     // Connect to DB
     static connect(){
         return new SQL(DB_FILE);

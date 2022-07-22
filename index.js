@@ -3,11 +3,12 @@ const botinfo = require("./botinfo.js");
 
 const TOKEN = botinfo.token;
 const Discord = require('discord.js');
-const myIntents = new Discord.Intents();
-myIntents.add(Discord.Intents.FLAGS.GUILD_MESSAGES);
-myIntents.add(Discord.Intents.FLAGS.GUILD_VOICE_STATES);
-myIntents.add(Discord.Intents.FLAGS.GUILD_MEMBERS);
-myIntents.add(Discord.Intents.FLAGS.GUILDS);
+const myIntents = new Discord.IntentsBitField();
+myIntents.add(Discord.IntentsBitField.Flags.GuildMessages);
+myIntents.add(Discord.IntentsBitField.Flags.GuildVoiceStates);
+myIntents.add(Discord.IntentsBitField.Flags.GuildMembers);
+myIntents.add(Discord.IntentsBitField.Flags.Guilds);
+myIntents.add(Discord.IntentsBitField.Flags.MessageContent);
 const bot = new Discord.Client({ intents: myIntents });
 // login the bot
 bot.login(TOKEN);

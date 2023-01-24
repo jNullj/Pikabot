@@ -68,12 +68,12 @@ class Command {
     }
 
     static addMemberToPrivateChannel(member, channel){
-        const newPermision = { VIEW_CHANNEL: true };
+        const newPermision = { ViewChannel: true };
         channel.permissionOverwrites.edit(member, newPermision);
     }
 
     static removeMemberFromPrivateChannel(member, channel){
-        const newPermision = { VIEW_CHANNEL: false };
+        const newPermision = { ViewChannel: false };
         channel.permissionOverwrites.edit(member, newPermision);
     }
 

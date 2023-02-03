@@ -105,16 +105,6 @@ class Command {
         }
     }
 
-    static privateChannelsString(client){
-        let channel_list = DB.getSelfAddChannels();
-        let result = "";
-        channel_list.forEach(channel => {
-          result += client.channels.cache.get(channel).toString();
-          result += " ";
-        });
-        return result;
-    }
-
     static async doPikaNoise(vchannel){
         if(vchannel==undefined){ console.log("pikanoise missing channel"); return; } //avoid crushing when vc is missing
 

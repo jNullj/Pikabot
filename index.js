@@ -83,11 +83,6 @@ bot.on('messageCreate', message => {
             message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
         }
         break;
-    case '!channels':
-        message.reply('Here is a list of private channels:\n' +
-          Command.privateChannelsString(message.client) +
-          '\nTo join them use the !joinChannel command');
-        break;
     case (message.content.match(/^!joinChannel /) || {}).input:
         Command.addToPrivateChannel(message);
         break;

@@ -20,6 +20,10 @@ git pull
 docker-compose --build -d
 ```
 
+## Commands deployment
+To deploy slash commands in your server please run the following command in the root directory of the app.
+`API_KEY=<secret-api-key> CLIENT_ID=<client-id> GUILD_ID=<guild-id> node deploy-commands.js`
+
 ## Database creation
 The database should be created automaticly when the database file is missing.
 

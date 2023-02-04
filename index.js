@@ -69,10 +69,6 @@ var bday_cheak = 1;    // last date birthday was cheaked
 bot.on('messageCreate', message => {
   Command.addPoints(message.author.id, 1);
   switch (message.content) {
-    case '!points':
-      points = Command.getPoints(message.author.id);
-      message.reply('You have '+points+' points.');
-      break;
     case (message.content.match(/^!setBDay /) || {}).input: // cheaks if starts with !setBDay
         // isolate the date from the command
         var regex = /!setBDay (.*)/;

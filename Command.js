@@ -53,28 +53,9 @@ class Command {
         return result;
     }
 
-    static addMemberToPrivateChannel(member, channel){
-        const newPermision = { ViewChannel: true };
-        channel.permissionOverwrites.edit(member, newPermision);
-    }
-
     static removeMemberFromPrivateChannel(member, channel){
         const newPermision = { ViewChannel: false };
         channel.permissionOverwrites.edit(member, newPermision);
-    }
-
-    static addToPrivateChannel(msg){
-      // isolate the date from the command
-        var regex = /!joinChannel (.*)/;
-        var channel_name = msg.content.match(regex)[1];
-        var channel = msg.guild.channels.cache.find(
-          channel => channel.name === channel_name);
-        if(channel != undefined && DB.isSelfAddChannel(channel.id)){
-          this.addMemberToPrivateChannel(msg.author, channel);
-          msg.reply("I added you to " + channel.toString());
-        }else{
-          msg.reply("Wrong channel was requested");
-        }
     }
 
     static removeFromPrivateChannel(msg){

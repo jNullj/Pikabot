@@ -10,13 +10,19 @@ module.exports = {
         let selectOptions = [];
         let channel_list = DB.getSelfAddChannels();
         channel_list.forEach(channelId => {
-            let channelName = interaction.guild.channels.cache.get(channelId).name
+            let channel = interaction.guild.channels.cache.get(channelId);
+            if (channel.members.has(interaction.member.id)) { return }
+            let channelName = channel.name
             selectOptions.push({
                 label: channelName,
                 description: channelName,
                 value: channelId
             });
-          });
+        });
+        if (selectOptions.length === 0) {
+            await interaction.reply('You are already a member of all private channels');
+            return
+        }
         const row = new ActionRowBuilder()
             .addComponents(
                 new StringSelectMenuBuilder()

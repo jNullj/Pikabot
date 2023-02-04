@@ -85,16 +85,6 @@ bot.on('messageCreate', message => {
     case (message.content.match(/^!leaveChannel /) || {}).input:
         Command.removeFromPrivateChannel(message);
         break;
-    case '!help':
-      message.reply(
-`Commands:
-!points         - how many points you got?
-!setBDay        - sets your birthday
-!channels       - see all joinable channels
-!joinChannel    - join a hidden channel
-!leaveChannel   - leave a hidden channel`
-        );
-      break;
     default:
         eventHandler(message);
         break;

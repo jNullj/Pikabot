@@ -79,9 +79,6 @@ bot.on('messageCreate', message => {
             message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
         }
         break;
-    case (message.content.match(/^!leaveChannel /) || {}).input:
-        Command.removeFromPrivateChannel(message);
-        break;
     default:
         eventHandler(message);
         break;

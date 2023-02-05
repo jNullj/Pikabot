@@ -53,25 +53,6 @@ class Command {
         return result;
     }
 
-    static removeMemberFromPrivateChannel(member, channel){
-        const newPermision = { ViewChannel: false };
-        channel.permissionOverwrites.edit(member, newPermision);
-    }
-
-    static removeFromPrivateChannel(msg){
-      // isolate the date from the command
-        var regex = /!leaveChannel (.*)/;
-        var channel_name = msg.content.match(regex)[1];
-        var channel = msg.guild.channels.cache.find(
-          channel => channel.name === channel_name);
-        if(channel != undefined && DB.isSelfAddChannel(channel.id)){
-          this.removeMemberFromPrivateChannel(msg.author, channel);
-          msg.reply("I removed you from " + channel.toString());
-        }else{
-          msg.reply("Wrong channel!");
-        }
-    }
-
     static async doPikaNoise(vchannel){
         if(vchannel==undefined){ console.log("pikanoise missing channel"); return; } //avoid crushing when vc is missing
 

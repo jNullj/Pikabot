@@ -61,6 +61,7 @@ const User = require('./User.js');
 const Command = require('./Command.js');
 // Load database
 const DB = require("./DB.js");
+const { ButtonStyle } = require("discord.js");
 DB.init_db(); // generate new db if non exists
 
 var bday_cheak = 1;    // last date birthday was cheaked
@@ -69,16 +70,6 @@ var bday_cheak = 1;    // last date birthday was cheaked
 bot.on('messageCreate', message => {
   Command.addPoints(message.author.id, 1);
   switch (message.content) {
-    case (message.content.match(/^!setBDay /) || {}).input: // cheaks if starts with !setBDay
-        // isolate the date from the command
-        var regex = /!setBDay (.*)/;
-        result = Command.setBDay(message.author.id, message.content.match(regex)[1]);
-        if (result) {
-            message.reply('Birthday was set for <@' + message.author.id + '>');
-        }else{
-            message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
-        }
-        break;
     default:
         eventHandler(message);
         break;
@@ -158,3 +149,30 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
     // user is a hacker
   }
 })
+
+// handle set-birthday form sumbit
+bot.on(Discord.Events.InteractionCreate, async interaction => {
+	if (!interaction.isModalSubmit()) return;
+	if (interaction.customId !== 'set-birthday-model') return;
+  const birthday_in = interaction.fields.getTextInputValue('birthday-text-input');
+  const id = interaction.user.id;
+  var result;
+  var user = new User(id);
+  if(!user.isExists()){
+    if (user.getID() < 0) {
+      throw 'invalid user id';
+    }
+    result = user.setBDay(birthday_in);
+    DB.newUser(id);
+    user.save();
+  }else{
+    user.load();    // load before saving to not overwrite other data
+    result = user.setBDay(birthday_in);
+    user.save();
+  }
+  if (result) {
+    await interaction.reply('Birthday was set')
+  }else{
+    await interaction.reply('Bad birthday format - use YYYY-MM-DD');
+  }
+});

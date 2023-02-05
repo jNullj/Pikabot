@@ -2,7 +2,7 @@
 A simple discord bot for the followers of lord pika.
 
 dependencies:
- - Node 18.4.0 or newer
+ - Node 19.5.0 or newer
  - all node dependencies in pacakge.json
 
 To install Node please consult your os/distro docs.

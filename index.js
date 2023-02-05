@@ -1,5 +1,8 @@
 // for testing/easy configuration
 const botinfo = require("./botinfo.js");
+// for loading command files
+const fs = require('node:fs');
+const path = require('node:path');
 
 const TOKEN = botinfo.token;
 const Discord = require('discord.js');
@@ -10,6 +13,42 @@ myIntents.add(Discord.IntentsBitField.Flags.GuildMembers);
 myIntents.add(Discord.IntentsBitField.Flags.Guilds);
 myIntents.add(Discord.IntentsBitField.Flags.MessageContent);
 const bot = new Discord.Client({ intents: myIntents });
+
+// slash commands handler
+bot.commands = new Discord.Collection();
+
+const commandsPath = path.join(__dirname, 'commands');
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+	const filePath = path.join(commandsPath, file);
+	const command = require(filePath);
+	// Set a new item in the Collection with the key as the command name and the value as the exported module
+	if ('data' in command && 'execute' in command) {
+		bot.commands.set(command.data.name, command);
+	} else {
+		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+	}
+}
+
+bot.on(Discord.Events.InteractionCreate, async interaction => {
+	if (!interaction.isChatInputCommand()) return;
+
+	const command = interaction.client.commands.get(interaction.commandName);
+
+	if (!command) {
+		console.error(`No command matching ${interaction.commandName} was found.`);
+		return;
+	}
+
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+	}
+});
+
 // login the bot
 bot.login(TOKEN);
 // critical, makes sure the bot will only start after discord gives it the green flag
@@ -22,6 +61,7 @@ const User = require('./User.js');
 const Command = require('./Command.js');
 // Load database
 const DB = require("./DB.js");
+const { ButtonStyle } = require("discord.js");
 DB.init_db(); // generate new db if non exists
 
 var bday_cheak = 1;    // last date birthday was cheaked
@@ -30,41 +70,6 @@ var bday_cheak = 1;    // last date birthday was cheaked
 bot.on('messageCreate', message => {
   Command.addPoints(message.author.id, 1);
   switch (message.content) {
-    case '!points':
-      points = Command.getPoints(message.author.id);
-      message.reply('You have '+points+' points.');
-      break;
-    case (message.content.match(/^!setBDay /) || {}).input: // cheaks if starts with !setBDay
-        // isolate the date from the command
-        var regex = /!setBDay (.*)/;
-        result = Command.setBDay(message.author.id, message.content.match(regex)[1]);
-        if (result) {
-            message.reply('Birthday was set for <@' + message.author.id + '>');
-        }else{
-            message.reply('Invalid, please write the day in the following format YYYY-MM-DD, without spaces');
-        }
-        break;
-    case '!channels':
-        message.reply('Here is a list of private channels:\n' +
-          Command.privateChannelsString(message.client) +
-          '\nTo join them use the !joinChannel command');
-        break;
-    case (message.content.match(/^!joinChannel /) || {}).input:
-        Command.addToPrivateChannel(message);
-        break;
-    case (message.content.match(/^!leaveChannel /) || {}).input:
-        Command.removeFromPrivateChannel(message);
-        break;
-    case '!help':
-      message.reply(
-`Commands:
-!points         - how many points you got?
-!setBDay        - sets your birthday
-!channels       - see all joinable channels
-!joinChannel    - join a hidden channel
-!leaveChannel   - leave a hidden channel`
-        );
-      break;
     default:
         eventHandler(message);
         break;
@@ -144,3 +149,30 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
     // user is a hacker
   }
 })
+
+// handle set-birthday form sumbit
+bot.on(Discord.Events.InteractionCreate, async interaction => {
+	if (!interaction.isModalSubmit()) return;
+	if (interaction.customId !== 'set-birthday-model') return;
+  const birthday_in = interaction.fields.getTextInputValue('birthday-text-input');
+  const id = interaction.user.id;
+  var result;
+  var user = new User(id);
+  if(!user.isExists()){
+    if (user.getID() < 0) {
+      throw 'invalid user id';
+    }
+    result = user.setBDay(birthday_in);
+    DB.newUser(id);
+    user.save();
+  }else{
+    user.load();    // load before saving to not overwrite other data
+    result = user.setBDay(birthday_in);
+    user.save();
+  }
+  if (result) {
+    await interaction.reply('Birthday was set')
+  }else{
+    await interaction.reply('Bad birthday format - use YYYY-MM-DD');
+  }
+});

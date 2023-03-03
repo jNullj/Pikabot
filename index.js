@@ -65,8 +65,6 @@ for (const file of eventFiles) {
 
 // login the bot
 bot.login(TOKEN);
-// Load the user class
-const User = require('./User.js');
 // Load commands class
 const Command = require('./Command.js');
 // Load database
@@ -139,30 +137,3 @@ bot.on('voiceStateUpdate', (oldState, newState) => {
     // user is a hacker
   }
 })
-
-// handle set-birthday form sumbit
-bot.on(Discord.Events.InteractionCreate, async interaction => {
-	if (!interaction.isModalSubmit()) return;
-	if (interaction.customId !== 'set-birthday-model') return;
-  const birthday_in = interaction.fields.getTextInputValue('birthday-text-input');
-  const id = interaction.user.id;
-  var result;
-  var user = new User(id);
-  if(!user.isExists()){
-    if (user.getID() < 0) {
-      throw 'invalid user id';
-    }
-    result = user.setBDay(birthday_in);
-    DB.newUser(id);
-    user.save();
-  }else{
-    user.load();    // load before saving to not overwrite other data
-    result = user.setBDay(birthday_in);
-    user.save();
-  }
-  if (result) {
-    await interaction.reply('Birthday was set')
-  }else{
-    await interaction.reply('Bad birthday format - use YYYY-MM-DD');
-  }
-});

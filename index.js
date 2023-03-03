@@ -76,20 +76,10 @@ DB.init_db(); // generate new db if non exists
 
 var bday_cheak = 1;    // last date birthday was cheaked
 
-// create an event listener for messages
+// call for the birthday handler each message
 bot.on('messageCreate', message => {
-  Command.addPoints(message.author.id, 1);
-  switch (message.content) {
-    default:
-        eventHandler(message);
-        break;
-  }
+  bdayHandler(message);
 });
-
-// handles events which are cheaked on each message
-function eventHandler(message){
-    bdayHandler(message);
-}
 
 // cheaks for new/old birthdays and updates server
 function bdayHandler(message){

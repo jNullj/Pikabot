@@ -1,5 +1,5 @@
 const { Events } = require('discord.js');
-const { isBirthdayCheckedToday, setLastBirthdayChecked } = require('../database/birthdayCheck.js');
+const { isBirthdayCheckedToday, setLastBirthdayChecked } = require('../utils/birthdayCheck.js');
 const DB = require('../DB.js');
 
 // call for the birthday handler each message

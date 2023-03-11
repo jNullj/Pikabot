@@ -87,13 +87,23 @@ class DB {
         db.prepare(sql).run(uid);
         this.disconnect(db);
     }
+
+    /**
+     * Find all users who have a birthday on a specified date
+     * 
+     * @param {Date} date - Date to search for users who have birthday
+     * @returns {number[]} - Array of discord user ids who have birthday on provided date
+     */
     static BDayOnDate(date){
-        var result = [];
-        var sql = `SELECT id
+        const result = [];
+        const month = date.getMonth() + 1; // Add 1 to convert from 0-based to 1-based index
+        const day = date.getDate();
+        const sql = `SELECT id
                     FROM users
-                    WHERE birthday LIKE ?`;
+                    WHERE SUBSTR(birthday, 6, 2) = ?
+                    AND SUBSTR(birthday, 9) = ?`;
         var db = this.connect();
-        var row = db.prepare(sql).all('%'+date);
+        const row = db.prepare(sql).all(month.toString().padStart(2, '0'), day.toString().padStart(2, '0'));
         this.disconnect(db);
         row.forEach((row) => {
             result.push(row.id);

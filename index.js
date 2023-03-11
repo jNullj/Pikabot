@@ -63,9 +63,9 @@ for (const file of eventFiles) {
 	}
 }
 
-// login the bot
-bot.login(TOKEN);
 // Load database
 const DB = require("./DB.js");
 DB.init_db(); // generate new db if non exists
 
+// login the bot
+bot.login(TOKEN);

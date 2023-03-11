@@ -67,6 +67,5 @@ for (const file of eventFiles) {
 bot.login(TOKEN);
 // Load database
 const DB = require("./DB.js");
-const { ButtonStyle } = require("discord.js");
 DB.init_db(); // generate new db if non exists
 

@@ -50,6 +50,8 @@ bot.on(Discord.Events.InteractionCreate, async interaction => {
 });
 
 // bot events handler
+const { CustomEventsInit } = require("./utils/customEvents.js");
+CustomEventsInit(bot);
 const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 

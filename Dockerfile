@@ -8,7 +8,6 @@ RUN apt-get update && apt-get upgrade -y && \
     ffmpeg \
     build-essential && \
     npm install --production && \
-    npm install sodium --production && \
     apt remove -y build-essential && \
     apt autoremove -y && \
     rm -rf /var/lib/apt/lists/*

@@ -13,6 +13,4 @@ RUN apt-get update && apt-get upgrade -y && \
     apt autoremove -y && \
     rm -rf /var/lib/apt/lists/*
 
-ENV DISCORD_API_TOKEN=
-
 ENTRYPOINT ["./docker.startup.sh"]

@@ -1,6 +1,7 @@
 const { isBirthdayCheckedToday, setLastBirthdayChecked } = require('../utils/birthdayCheck.js');
 const DB = require('../DB.js');
 const { CustomEvent } = require('../utils/customEvents.js');
+const { Colors } = require('discord.js');
 
 // call for the birthday handler when the date changes
 // cheaks for new/old birthdays and updates servers
@@ -9,10 +10,20 @@ module.exports = {
 	once: false,
 	execute(client) {
         if (isBirthdayCheckedToday()) { return; }
-        client.guilds.cache.forEach(guild => {
-            const birthdayRole = guild.roles.cache.find(role => role.name === 'BIRTHDAY');
+        client.guilds.cache.forEach(async guild => {
+            let birthdayRole = await guild.roles.cache.find(role => role.name === 'BIRTHDAY');
+             // If the role doesn't exist, create it
+            if (!birthdayRole) {
+                birthdayRole = await guild.roles.create({
+                    name: 'BIRTHDAY',
+                    color: Colors.Green,
+                    hoist: true,
+                    permissions: []
+                });
+                console.log(`Created missing role ${birthdayRole}`);
+            }
             // remove old birthday kings 👑 from role
-            birthdayRole.members.map(user => user.roles.remove(birthdayRole).catch(console.error));
+            await birthdayRole.members.map(user => user.roles.remove(birthdayRole).catch(console.error));
             
             const today = new Date();
             const bdKings = DB.BDayOnDate(today);
@@ -29,9 +40,9 @@ module.exports = {
                     main_channel.send(`👑Happy Birthday ${birthdayUser}!👑`);
                 });
             });
-    
-            // update last cheak date to today
-            setLastBirthdayChecked(today);
         })
+        // update last cheak date to today
+        const today = new Date();
+        setLastBirthdayChecked(today);
 	},
 };

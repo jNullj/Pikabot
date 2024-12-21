@@ -63,6 +63,7 @@ class DB {
      */
     static getHighscore(limit){
         let sql = `SELECT CAST(id AS TEXT) id, points
+                    FROM users
                     WHERE points > 0
                     ORDER BY points DESC
                     LIMIT ?`;

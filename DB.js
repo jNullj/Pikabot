@@ -58,16 +58,16 @@ class DB {
     }
     /**
      * Get highscore list
-     * @param {number} maxResults 
+     * @param {number} limit - Maximum number of highscore entries to return
      * @returns {Object[]} - Array of objects containing id and points
      */
-    static getHighscore(maxResults){
+    static getHighscore(limit){
         let sql = `SELECT CAST(id AS TEXT) id, points
                     WHERE points > 0
                     ORDER BY points DESC
                     LIMIT ?`;
         var db = this.connect();
-        var row = db.prepare(sql).all(maxResults);
+        var row = db.prepare(sql).all(limit);
         this.disconnect(db);
         return row;
     }

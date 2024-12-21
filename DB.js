@@ -56,6 +56,21 @@ class DB {
         this.disconnect(db);
         return row.points;
     }
+    /**
+     * Get highscore list
+     * @param {number} maxResults 
+     * @returns {Object[]} - Array of objects containing id and points
+     */
+    static getHighscore(maxResults){
+        let sql = `SELECT CAST(id AS TEXT) id, points
+                    WHERE points > 0
+                    ORDER BY points DESC
+                    LIMIT ?`;
+        var db = this.connect();
+        var row = db.prepare(sql).all(maxResults);
+        this.disconnect(db);
+        return row;
+    }
     // get birthday for user
     static getBirthday(uid){
         var sql = `SELECT birthday

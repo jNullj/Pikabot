@@ -11,7 +11,7 @@ RUN npm install --production
 COPY . .
 
 # Stage 2: Final image
-FROM node:23.10.0
+FROM node:23.10.0-slim
 
 WORKDIR /app
 

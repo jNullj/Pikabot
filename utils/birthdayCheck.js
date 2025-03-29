@@ -7,7 +7,6 @@
 /** @type {Date} */
 let lastBirthdayChecked = new Date('2000-00-00');
 
-
 /**
  * Set the date of the last time birthdays were checked.
  *
@@ -15,7 +14,7 @@ let lastBirthdayChecked = new Date('2000-00-00');
  * @param {Date} date - The date of the last time birthdays were checked.
  * @returns {void}
  */
-function setLastBirthdayChecked(date) {
+export function setLastBirthdayChecked(date) {
   lastBirthdayChecked = date;
 }
 
@@ -25,7 +24,7 @@ function setLastBirthdayChecked(date) {
  * @function
  * @returns {Date} The date of the last time birthdays were checked.
  */
-function getLastBirthdayChecked() {
+export function getLastBirthdayChecked() {
   return lastBirthdayChecked;
 }
 
@@ -33,7 +32,7 @@ function getLastBirthdayChecked() {
  * Check if birthday checked today
  * @returns {boolean} was birthday checked today
  */
-function isBirthdayCheckedToday() {
+export function isBirthdayCheckedToday() {
     const today = new Date();
     return (
         lastBirthdayChecked.getFullYear() === today.getFullYear() &&
@@ -41,9 +40,3 @@ function isBirthdayCheckedToday() {
         lastBirthdayChecked.getDate() === today.getDate()
     );
 }
-
-module.exports = {
-  setLastBirthdayChecked,
-  getLastBirthdayChecked,
-  isBirthdayCheckedToday,
-};

@@ -1,9 +1,7 @@
-const { Events } = require('discord.js');
+import { Events } from 'discord.js';
 
-module.exports = {
-	name: Events.ClientReady,
-	once: true,
-	execute(client) {
-		console.log('Bot is ready!');
-	},
-};
+export const name = Events.ClientReady;
+export const once = true;
+export function execute(client) {
+	console.log('Bot is ready!');
+}

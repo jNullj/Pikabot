@@ -1,2 +1,2 @@
-//exports.token = ''; //testing
-exports.token = ''; //production token
+//export const token = ''; //testing
+export const token = ''; //production token

@@ -1,37 +1,41 @@
 // for testing/easy configuration
-const botinfo = require("./botinfo.js");
+import { token } from "./botinfo.js";
 // for loading command files
-const fs = require('node:fs');
-const path = require('node:path');
+import { readdirSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const TOKEN = botinfo.token;
-const Discord = require('discord.js');
-const myIntents = new Discord.IntentsBitField();
-myIntents.add(Discord.IntentsBitField.Flags.GuildMessages);
-myIntents.add(Discord.IntentsBitField.Flags.GuildVoiceStates);
-myIntents.add(Discord.IntentsBitField.Flags.GuildMembers);
-myIntents.add(Discord.IntentsBitField.Flags.Guilds);
-myIntents.add(Discord.IntentsBitField.Flags.MessageContent);
-const bot = new Discord.Client({ intents: myIntents });
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const TOKEN = token;
+import { IntentsBitField, Client, Collection, Events, MessageFlags } from 'discord.js';
+const myIntents = new IntentsBitField();
+myIntents.add(IntentsBitField.Flags.GuildMessages);
+myIntents.add(IntentsBitField.Flags.GuildVoiceStates);
+myIntents.add(IntentsBitField.Flags.GuildMembers);
+myIntents.add(IntentsBitField.Flags.Guilds);
+myIntents.add(IntentsBitField.Flags.MessageContent);
+const bot = new Client({ intents: myIntents });
 
 // slash commands handler
-bot.commands = new Discord.Collection();
+bot.commands = new Collection();
 
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+const commandsPath = join(__dirname, 'commands');
+const commandFiles = readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 for (const file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
+	const filePath = join(commandsPath, file);
+	const { data, execute } = await import(filePath);
 	// Set a new item in the Collection with the key as the command name and the value as the exported module
-	if ('data' in command && 'execute' in command) {
-		bot.commands.set(command.data.name, command);
+	if (data && execute) {
+		bot.commands.set(data.name, { data, execute });
 	} else {
 		console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
 	}
 }
 
-bot.on(Discord.Events.InteractionCreate, async interaction => {
+bot.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isChatInputCommand()) return;
 
 	const command = interaction.client.commands.get(interaction.commandName);
@@ -45,28 +49,28 @@ bot.on(Discord.Events.InteractionCreate, async interaction => {
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', flags: Discord.MessageFlags.Ephemeral });
+		await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
 	}
 });
 
 // bot events handler
-const { CustomEventsInit } = require("./utils/customEvents.js");
+import { CustomEventsInit } from "./utils/customEvents.js";
 CustomEventsInit(bot);
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+const eventsPath = join(__dirname, 'events');
+const eventFiles = readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		bot.once(event.name, (...args) => event.execute(...args));
+	const filePath = join(eventsPath, file);
+	const { name, once, execute } = await import(filePath);
+	if (once) {
+		bot.once(name, (...args) => execute(...args));
 	} else {
-		bot.on(event.name, (...args) => event.execute(...args));
+		bot.on(name, (...args) => execute(...args));
 	}
 }
 
 // Load database
-const DB = require("./DB.js");
+import DB from "./DB.js";
 DB.init_db(); // generate new db if non exists
 
 // login the bot

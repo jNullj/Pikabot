@@ -2,6 +2,7 @@
   "name": "Pikabot",
   "description": "A simple discord bot for the followers of lord pika.",
   "version": "0.0.1",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/jNullj/Pikabot.git"

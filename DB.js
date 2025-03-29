@@ -1,11 +1,11 @@
-var SQL = require('better-sqlite3'); // Load sqlite module
+import SQL from 'better-sqlite3'; // Load sqlite module
+import fs from 'node:fs'; // import fs to check if db exists and read db init file
 const DB_FILE = 'database/database.db'; // DB File name
 const DB_INIT_FILE = 'db_creation.sql'; // DB creation instructions
 
 class DB {
     static init_db() {
         // check if db exists, if not create it
-        const fs = require('fs') // import fs to check if db exists and read db init file
         try {
             if (!fs.existsSync(DB_FILE)) {
                 console.log('DB file does not exist, creating new DB.')
@@ -155,4 +155,4 @@ class DB {
     }
 }
 
-module.exports = DB;
+export default DB;

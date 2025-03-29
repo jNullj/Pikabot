@@ -1,5 +1,5 @@
 // Load database
-const DB = require("./DB.js");
+import DB from './DB.js';
 
 class User {
     constructor(id = -1 ,points = 0){
@@ -65,4 +65,4 @@ class User {
     }
 }
 
-module.exports = User;
+export default User;

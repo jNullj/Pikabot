@@ -16,4 +16,4 @@ const CustomEvent = {
     DateChange: 'dateChange'
 }
 
-module.exports = { CustomEvent, CustomEventsInit: init }
+export { CustomEvent, init as CustomEventsInit }

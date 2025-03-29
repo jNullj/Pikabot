@@ -1,3 +1,16 @@
+# Stage 1: Build
+FROM node:23.10.0 AS builder
+
+WORKDIR /app
+
+# Install application dependencies
+COPY package.json ./
+RUN npm install --production
+
+# Copy application source
+COPY . .
+
+# Stage 2: Final image
 FROM node:23.10.0
 
 WORKDIR /app
@@ -8,10 +21,7 @@ RUN apt-get update && \
     ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
-# Install application dependencies
-COPY package.json ./
-RUN npm install --production
-
-COPY . .
+# Copy only necessary files from the builder stage
+COPY --from=builder /app /app
 
 ENTRYPOINT ["./docker.startup.sh"]

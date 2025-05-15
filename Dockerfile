@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:23.11.0 AS builder
+FROM node:24.0.2 AS builder
 
 WORKDIR /app
 
@@ -11,7 +11,7 @@ RUN npm install --omit=dev
 COPY . .
 
 # Stage 2: Final image
-FROM node:23.11.0-slim
+FROM node:24.0.2-slim
 
 WORKDIR /app
 

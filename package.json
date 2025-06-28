@@ -13,7 +13,7 @@
   "homepage": "https://github.com/jNullj/Pikabot",
   "dependencies": {
     "@discordjs/voice": "0.18.0",
-    "better-sqlite3": "12.1.0",
+    "better-sqlite3": "12.1.1",
     "discord.js": "14.21.0",
     "sodium":"3.0.2"
   },

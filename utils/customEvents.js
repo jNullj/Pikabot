@@ -1,5 +1,5 @@
 const init = (client) => {
-    client.on('ready', () => {
+    client.on('clientReady', () => {
         setInterval(dateChangeEventLoop, 1000, client)
     })
 }

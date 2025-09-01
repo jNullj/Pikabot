@@ -25,7 +25,15 @@ RUN apt-get update && \
     ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
+RUN groupadd -r nodeuser && useradd -r -g nodeuser nodeuser
+
 # Copy only necessary files from the builder stage
 COPY --from=builder /app /app
+
+# Ensure all files and database directory are owned by nodeuser
+RUN mkdir -p /app/database \
+    && chown -R nodeuser:nodeuser /app
+
+USER nodeuser
 
 ENTRYPOINT ["./docker.startup.sh"]

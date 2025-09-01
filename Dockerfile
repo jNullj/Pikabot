@@ -4,8 +4,8 @@ FROM node:24.7.0 AS builder
 WORKDIR /app
 
 # Install application dependencies
-COPY package.json ./
-RUN npm install --omit=dev
+COPY package.json package-lock.json ./
+RUN npm ci --omit=dev
 
 # Copy application source
 COPY . .

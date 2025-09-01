@@ -3,6 +3,8 @@ FROM node:24.7.0 AS builder
 
 WORKDIR /app
 
+ENV NODE_ENV=production
+
 # Install application dependencies
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
@@ -14,6 +16,8 @@ COPY . .
 FROM node:24.7.0-slim
 
 WORKDIR /app
+
+ENV NODE_ENV=production
 
 # Install system dependencies
 RUN apt-get update && \

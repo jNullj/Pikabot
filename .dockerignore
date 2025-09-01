@@ -6,7 +6,7 @@ package-lock.json
 **/*.wav
 .env
 .env-dst
-docker-compose.yml
+compose.yml
 **/*.db
 .dockerignore
 .github/

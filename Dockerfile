@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:24.7.0 AS builder
+FROM node:24.7.0-alpine AS builder
 
 WORKDIR /app
 
@@ -13,19 +13,16 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Stage 2: Final image
-FROM node:24.7.0-slim
+FROM node:24.7.0-alpine
 
 WORKDIR /app
 
 ENV NODE_ENV=production
 
 # Install system dependencies
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    ffmpeg && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ffmpeg
 
-RUN groupadd -r nodeuser && useradd -r -g nodeuser nodeuser
+RUN addgroup -S nodeuser && adduser -S nodeuser -G nodeuser
 
 # Copy only necessary files from the builder stage
 COPY --from=builder /app /app

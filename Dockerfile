@@ -5,11 +5,6 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Install build dependencies
-# Python is required for building better-sqlite3
-# Fixes: https://github.com/WiseLibs/better-sqlite3/issues/1411
-RUN apk add --no-cache python3 make g++
-
 # Install application dependencies
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev

@@ -16,8 +16,32 @@ class DB {
                 this.disconnect(db)
                 console.log('new DB created at ' + DB_FILE)
             }
+            this.migrateLegacySchema();
         } catch(v) {
             console.error(v)
+        }
+    }
+
+    /**
+     * Migration helper — For backward compatibility only.
+     *
+     * This will check for schema changes from legacy versions and apply necessary updates.
+     * mark change date with comment and remove old upgrades when no longer needed.
+     */
+    static migrateLegacySchema() {
+        // Added 2025-12-10: Add last_voice column to users table if it doesn't exist
+        const db = this.connect();
+        try {
+            const rows = db.prepare("PRAGMA table_info('users')").all();
+            const hasLastVoice = rows.some(r => r.name === 'last_voice');
+            if (!hasLastVoice) {
+                console.log('Legacy DB detected: adding last_voice column to users table (backward-compatibility).');
+                db.prepare(`ALTER TABLE users ADD COLUMN last_voice INTEGER`).run();
+            }
+        } catch (err) {
+            console.error('Error while checking/updating DB schema:', err);
+        } finally {
+            this.disconnect(db);
         }
     }
     // Connect to DB
@@ -45,6 +69,22 @@ class DB {
         var db = this.connect();
         db.prepare(sql).run(date, uid);
         this.disconnect(db);
+    }
+
+    // set last voice timestamp for user (milliseconds since epoch)
+    static setLastVoice(uid, timestamp){
+        var sql = `UPDATE users
+                    SET last_voice = ?
+                    WHERE id = ?`;
+        var db = this.connect();
+        try {
+            db.prepare(sql).run(timestamp, uid);
+        } catch (err) {
+            // If the column doesn't exist or update fails, log and return.
+            console.error('Failed to set last_voice (schema may be missing):', err.message);
+        } finally {
+            this.disconnect(db);
+        }
     }
     // get points for user
     static getPoints(uid){
@@ -81,6 +121,24 @@ class DB {
         var row = db.prepare(sql).get(uid);
         this.disconnect(db);
         return row.birthday;
+    }
+
+    // get last voice timestamp (milliseconds since epoch) for user
+    static getLastVoice(uid){
+        var sql = `SELECT last_voice
+                    FROM users
+                    WHERE id = ?`;
+        var db = this.connect();
+        var row;
+        try {
+            row = db.prepare(sql).get(uid);
+        } catch (err) {
+            // If column doesn't exist, return null
+            this.disconnect(db);
+            return null;
+        }
+        this.disconnect(db);
+        return row ? row.last_voice : null;
     }
     // cheak if user exists in db, returns bool
     static isUserExist(uid){

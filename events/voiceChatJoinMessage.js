@@ -1,6 +1,7 @@
 import { createAudioPlayer, joinVoiceChannel, createAudioResource, entersState, AudioPlayerStatus, VoiceConnectionStatus } from '@discordjs/voice';
 import { Events } from 'discord.js';
 import { pickRandomFile } from '../utils/path.js';
+import DB from '../DB.js';
 const SOUND_FOLDER = './sounds/';
 
 export const name = Events.VoiceStateUpdate;
@@ -16,6 +17,12 @@ export async function execute(oldState, newState) {
     // dont triger from bots
     if (newState.member.user.bot === true) { return; }
     // user joined voice chat, wellcome them
+    // record last voice join timestamp
+    try {
+        DB.setLastVoice(newState.member.id, Date.now());
+    } catch (err) {
+        console.error('Failed to record last voice join:', err);
+    }
     const audioFile = pickRandomFile(SOUND_FOLDER, ['.wav']);
     if (!audioFile) { console.error('No audio files found for voiceChatJoinMessage'); return; }
     const player = createAudioPlayer();

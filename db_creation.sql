@@ -1,7 +1,8 @@
 CREATE TABLE users (
 	id INTEGER NOT NULL,
 	points INTEGER,
-	birthday INTEGER
+	birthday INTEGER,
+	last_voice INTEGER
 );
 
 CREATE UNIQUE INDEX users_id_IDX ON users (id);

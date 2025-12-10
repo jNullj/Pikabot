@@ -29,14 +29,19 @@ class DB {
      * mark change date with comment and remove old upgrades when no longer needed.
      */
     static migrateLegacySchema() {
-        // Added 2025-12-10: Add last_voice column to users table if it doesn't exist
+        // Added 2025-12-10: Add last_voice, last_message columns to users table if they don't exist
         const db = this.connect();
         try {
             const rows = db.prepare("PRAGMA table_info('users')").all();
             const hasLastVoice = rows.some(r => r.name === 'last_voice');
+            const hasLastMessage = rows.some(r => r.name === 'last_message');
             if (!hasLastVoice) {
-                console.log('Legacy DB detected: adding last_voice column to users table (backward-compatibility).');
+                console.log('Legacy DB detected: adding last_voice column to users table (schema upgrade).');
                 db.prepare(`ALTER TABLE users ADD COLUMN last_voice INTEGER`).run();
+            }
+            if (!hasLastMessage) {
+                console.log('Legacy DB detected: adding last_message column to users table (schema upgrade).');
+                db.prepare(`ALTER TABLE users ADD COLUMN last_message INTEGER`).run();
             }
         } catch (err) {
             console.error('Error while checking/updating DB schema:', err);
@@ -210,6 +215,41 @@ class DB {
             result.push(row.id);
         });
         return result;
+    }
+    
+    // set last message timestamp for user (milliseconds since epoch)
+    static setLastMessage(uid, timestamp){
+        var sql = `UPDATE users
+                    SET last_message = ?
+                    WHERE id = ?`;
+        var db = this.connect();
+        try {
+            db.prepare(sql).run(timestamp, uid);
+        } catch (err) {
+            // If the column doesn't exist or update fails, log and return.
+            console.error('Failed to set last_message (schema may be missing):', err.message);
+        } finally {
+            this.disconnect(db);
+        }
+    }
+
+    // get last message timestamp (milliseconds since epoch) for user
+    static getLastMessage(uid){
+        var sql = `SELECT last_message
+                    FROM users
+                    WHERE id = ?`;
+        var db = this.connect();
+        var row;
+        try {
+            row = db.prepare(sql).get(uid);
+        } catch (err) {
+            // If column doesn't exist or query fails, return null (do not modify schema)
+            console.error('Failed to read last_message (schema may be missing):', err.message);
+            this.disconnect(db);
+            return null;
+        }
+        this.disconnect(db);
+        return row ? row.last_message : null;
     }
 }
 

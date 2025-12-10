@@ -19,4 +19,11 @@ export function execute(message) {
         user.setPoints(user.getPoints() + MessagePointsReward);
         user.save();
     }
+
+    // record last message timestamp (ms since epoch)
+    try {
+        DB.setLastMessage(message.author.id, Date.now());
+    } catch (err) {
+        console.error('Failed to record last message timestamp:', err);
+    }
 }

@@ -21,3 +21,9 @@ CREATE TABLE selfAddChannels (
 );
 
 CREATE UNIQUE INDEX selfAddChannels_id_IDX ON selfAddChannels (id);
+
+CREATE TABLE admins (
+	id INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX admins_id_IDX ON admins (id);

@@ -29,9 +29,9 @@ class DB {
      * mark change date with comment and remove old upgrades when no longer needed.
      */
     static migrateLegacySchema() {
-        // Added 2025-12-10: Add last_voice, last_message columns to users table if they don't exist
         const db = this.connect();
         try {
+            // Added 2025-12-10: Add last_voice, last_message columns to users table if they don't exist
             const rows = db.prepare("PRAGMA table_info('users')").all();
             const hasLastVoice = rows.some(r => r.name === 'last_voice');
             const hasLastMessage = rows.some(r => r.name === 'last_message');
@@ -42,6 +42,14 @@ class DB {
             if (!hasLastMessage) {
                 console.log('Legacy DB detected: adding last_message column to users table (schema upgrade).');
                 db.prepare(`ALTER TABLE users ADD COLUMN last_message INTEGER`).run();
+            }
+            // Added 2025-12-28: Create admins table if it doesn't exist
+            // Ensure admins table exists for legacy DBs
+            const adminRows = db.prepare("PRAGMA table_info('admins')").all();
+            if (!adminRows || adminRows.length === 0) {
+                console.log('Legacy DB detected: creating admins table (schema upgrade).');
+                db.prepare(`CREATE TABLE IF NOT EXISTS admins (id INTEGER NOT NULL)`).run();
+                db.prepare(`CREATE UNIQUE INDEX IF NOT EXISTS admins_id_IDX ON admins (id)`).run();
             }
         } catch (err) {
             console.error('Error while checking/updating DB schema:', err);
@@ -202,6 +210,17 @@ class DB {
         }else{
             return true;            // else the user was retrieved from the db, user exists in db
         }
+    }
+
+    // check if user id exists in admins table
+    static isAdmin(uid){
+        const sql = `SELECT id
+                    FROM admins
+                    WHERE id = ?`;
+        const db = this.connect();
+        const row = db.prepare(sql).get(uid);
+        this.disconnect(db);
+        return row !== undefined;
     }
 
     static getSelfAddChannels(){

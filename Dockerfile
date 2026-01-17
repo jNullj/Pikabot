@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:25.2.1-alpine AS builder
+FROM node:25.3.0-alpine AS builder
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN npm ci --omit=dev
 COPY . .
 
 # Stage 2: Final image
-FROM node:25.2.1-alpine
+FROM node:25.3.0-alpine
 
 WORKDIR /app
 

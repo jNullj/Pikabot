@@ -216,11 +216,23 @@ class DB {
     static isAdmin(uid){
         const sql = `SELECT id
                     FROM admins
-                    WHERE id = ?`;
-        const db = this.connect();
-        const row = db.prepare(sql).get(uid);
-        this.disconnect(db);
-        return row !== undefined;
+                    WHERE id = ?`
+        let db
+        try {
+            db = this.connect()
+            const row = db.prepare(sql).get(uid)
+            this.disconnect(db)
+            return row !== undefined
+        } catch (err) {
+            console.error('Failed to check admin status:', err.message)
+            if (db) {
+                try { this.disconnect(db) } catch (closeErr) {
+                    console.error('Failed to disconnect DB after admin check error:', closeErr.message)
+                }
+            }
+        } finally {
+            return false
+        }
     }
 
     static getSelfAddChannels(){

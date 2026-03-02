@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from 'discord.js';
+import { SlashCommandBuilder, MessageFlags } from 'discord.js';
 import DB from '../DB.js';
 
 export const data = new SlashCommandBuilder()
@@ -13,27 +13,27 @@ export const data = new SlashCommandBuilder()
 export async function execute(interaction) {
     // Validate caller is an admin in application DB
     if (!DB.isAdmin(interaction.user.id)) {
-        await interaction.reply({ content: 'You are not authorized to use this command.', ephemeral: true });
+        await interaction.reply({ content: 'You are not authorized to use this command.', flags: MessageFlags.Ephemeral });
         return;
     }
 
     const target = interaction.options.getUser('user');
     if (!target) {
-        await interaction.reply({ content: 'No user specified.', ephemeral: true });
+        await interaction.reply({ content: 'No user specified.', flags: MessageFlags.Ephemeral });
         return;
     }
 
     if (!DB.isUserExist(target.id)) {
-        await interaction.reply({ content: `User <@${target.id}> does not exist in the application DB.`, ephemeral: true });
+        await interaction.reply({ content: `User <@${target.id}> does not exist in the application DB.`, flags: MessageFlags.Ephemeral });
         return;
     }
 
     const ts = DB.getLastVoice(target.id);
     if (!ts) {
-        await interaction.reply({ content: `No last voice join record for <@${target.id}>.`, ephemeral: true });
+        await interaction.reply({ content: `No last voice join record for <@${target.id}>.`, flags: MessageFlags.Ephemeral });
         return;
     }
 
     const dt = new Date(ts);
-    await interaction.reply({ content: `<@${target.id}> last voice join: ${dt.toUTCString()}`, ephemeral: true });
+    await interaction.reply({ content: `<@${target.id}> last voice join: ${dt.toUTCString()}`, flags: MessageFlags.Ephemeral });
 }

@@ -221,17 +221,18 @@ class DB {
         try {
             db = this.connect()
             const row = db.prepare(sql).get(uid)
-            this.disconnect(db)
             return row !== undefined
         } catch (err) {
             console.error('Failed to check admin status:', err.message)
+            return false
+        } finally {
             if (db) {
-                try { this.disconnect(db) } catch (closeErr) {
+                try {
+                    this.disconnect(db)
+                } catch (closeErr) {
                     console.error('Failed to disconnect DB after admin check error:', closeErr.message)
                 }
             }
-        } finally {
-            return false
         }
     }
 

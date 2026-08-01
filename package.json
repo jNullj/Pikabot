@@ -14,7 +14,7 @@
   "dependencies": {
     "@discordjs/voice": "0.19.2",
     "better-sqlite3": "12.11.1",
-    "discord.js": "14.26.5"
+    "discord.js": "14.27.0"
   },
   "engines": {
     "node": ">=22.12.0"

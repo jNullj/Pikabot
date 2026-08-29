@@ -7,6 +7,8 @@ ENV NODE_ENV=production
 
 # Install application dependencies
 COPY package.json package-lock.json ./
+# python3 & make for building better-sqlite3
+RUN apk add --no-cache python3 make
 RUN npm ci --omit=dev
 
 # Copy application source
